@@ -1,0 +1,110 @@
+:root {
+    --pr-color : #048853;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #F3FFF4;
+}
+
+/* NAVBAR STYLE */
+
+.navbar {
+    z-index: 3;
+}
+
+* {
+    z-index: 2;
+}
+
+.accsent-img {
+    z-index: 1;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.navbar-brand img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    display: block;
+    margin: auto;
+    padding: auto;
+}
+
+.nav-link {
+    font-size: 16px;
+}
+
+.nav-link.active {
+    font-weight: 700;
+}
+
+.button-primary {
+    width: 133px;
+    height: 40px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.button-secondary {
+    width: 133px;
+    height: 40px;
+    background-color: #fff;
+    color: var(--pr-color);
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* HERO SECTION */
+
+#hero {
+    background: linear-gradient(160deg, var(--pr-color), #000);
+    height: 100vh; /*ukuran layar*/
+    width: 100%;
+}
+
+.img-hero {
+    width: 600px;
+    height: 480px;
+    margin-bottom: 70px;
+    z-index: 2;
+}
+
+.hero-tagline h1{
+    color: #fff;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 72px;
+    margin-top: 30px;
+}
+
+.hero-tagline p {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 60px;
+    margin-top: 20px;
+    line-height: 30px;
+    width: 100%;
+}
+
+.button-lg-primary {
+    width: 200px;
+    height: 50px;
+    background-color: #fff;
+    color: var(--pr-color);
+    border: none;
+    font-size: 17px;
+    font-weight: 700;
+    border-radius: 5px;
+}
