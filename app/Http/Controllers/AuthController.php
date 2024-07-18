@@ -31,10 +31,13 @@ class AuthController extends Controller
                 return redirect()->route('dashboardadmin');
             } elseif (auth()->user()->isGuru()) {
                 // Jika peran adalah 'kepsek', redirect ke halaman home
-                return redirect()->route('materiguru');
+                return redirect()->route('dashboardguru');
             } elseif (auth()->user()->isKepsek()) {
                 // Jika peran adalah 'kepsek', redirect ke halaman home
                 return redirect()->route('dashboardkepsek');
+            } elseif (auth()->user()->isSiswa()) {
+                // Jika peran adalah 'kepsek', redirect ke halaman home
+                return redirect()->route('siswa.materi.index');
             } else {
                 // Jika peran bukan 'guru' atau 'kepsek', akan ditampilkan pesan error
                 return back()->with('error', 'Akses ditolak. Anda tidak memiliki izin yang cukup.');
@@ -46,6 +49,21 @@ class AuthController extends Controller
         // dd($data);
     }
 
+    public function ubahPassword(Request $request)
+    {
+        if (!Hash::check($request->passwordLama, auth()->user()->password)) {
+            return back()->with('error', 'password lama tidak sesuai!');
+        }
+
+        if ($request->passwordBaru != $request->repeatPassword) {
+            return back()->with('error', 'password baru tidak sama!');
+        }
+        auth()->user()->update([
+            'password' => Hash::make($request->passwordBaru),
+        ]);
+        return redirect()->route('viewProfil');
+    }
+    
     public function logout(Request $request)
     {
         Auth::logout();

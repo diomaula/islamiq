@@ -6,6 +6,13 @@
         @include('layouts.sidebar')
         <div class="main">
             @include('layouts.navbar')
+
+            @if(@session()->has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <main class="content px-3 py-4">
                 <div class="container-fluid">
                     <div class="mb-3">
@@ -19,16 +26,18 @@
                             <div class="card-body">
                                 <table class="table table-striped table-hover">
                                     <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th scope="col">Nomor Induk</th>
+                                            <th scope="col">Nama</th>
                                             <th scope="col">Role</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($users as $user)
-                                        <tr>
+                                        <tr class="text-center">
                                             <td>{{ $user->ni }}</td>
+                                            <td>{{ $user->namaLengkap }}</td>
                                             <td>{{ $user->role }}</td>
                                             <td class="table-actions">
                                                 <form action="{{ route('user.destroy', $user->ni) }}" method="POST" style="display:inline">
@@ -57,15 +66,13 @@
                                 
                             </div>
                           </div>
-                        
-                        
-                        
+                                                                 
                         <!-- Modal Tambah-->
                         <div class="modal fade modal-lg" id="modalTambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Tambah User</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
@@ -96,6 +103,10 @@
                                                             <input type="number" class="form-control" id="ni" name="ni" required>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label for="namaLengkap">Nama:</label>
+                                                            <input type="text" class="form-control" id="namaLengkap" name="namaLengkap" required>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label for="password">Password:</label>
                                                             <input type="text" class="form-control" id="password" name="password" required>
                                                         </div>
@@ -123,9 +134,6 @@
                             </div>
                         </div>
                     
-
-
-  
                         <!-- Modal Upload-->
                         <div class="modal fade" id="modalUpload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -149,7 +157,6 @@
                             </div>
                         </div>
                         
-
                         <!-- Modal Show-->
                         @foreach($users as $user)
                         <div class="modal fade modal-lg" id="showModal{{$user->ni}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -170,6 +177,12 @@
                                                                 <div class="form-group">
                                                                     <strong>Nomor Induk :</strong>
                                                                     {{ $user->ni }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <strong>Nama :</strong>
+                                                                    {{ $user->namaLengkap }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-12 col-sm-12 col-md-12">
@@ -198,7 +211,6 @@
                             </div>
                         </div>
                         @endforeach
-
 
                         <!-- Modal Edit -->
                         @foreach($users as $user)
@@ -258,9 +270,7 @@
                             </div>
                         </div>
                         @endforeach
-
-
-                        
+                       
                     </div>
                 </div>
             </main>

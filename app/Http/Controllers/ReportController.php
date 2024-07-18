@@ -26,5 +26,20 @@ class ReportController extends Controller
         return $pdf->stream($role . '_user_list.pdf');
         
     }
+
+    public function cetakUsers()
+    {
+        $users = User::get();
+
+        $data = [
+            'title' => "Daftar User",
+            'users' => $users,
+        ];
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('admin.pdf', $data);
+
+        return $pdf->stream('_user_list.pdf');
+    }
     
 }

@@ -4,14 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Materi;
+use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
 {
-    public function index()
+    public function indexGuru()
     {
         $materis = Materi::paginate(5);
+        return view('guru.materi', compact('materis'));
+    }
 
-        return view('guru.materi', ['materis' => $materis]);
+    public function indexSiswa()
+    {
+        $materis = Materi::paginate(5);
+        return view('siswa.materi', compact('materis'));
+    }
+
+    public function indexKepsek()
+    {
+        $materis = Materi::paginate(5);
+        return view('kepsek.materi', compact('materis'));
     }
 
     public function create()
@@ -24,38 +36,48 @@ class MateriController extends Controller
         $request->validate([
             'judulMateri' => 'required|max:255',
             'fileMateri' => 'required|mimes:pdf|max:20480', // 20MB limit
+            'linkVideo' => 'nullable|url',
         ]);
 
-        $data = $request->all();
+        $materi = new Materi();
+        $materi->judulMateri = $request->judulMateri;
+        $materi->linkVideo = $request->linkVideo;
 
-        // Handle file upload
+        // Upload file if exists
         if ($request->hasFile('fileMateri')) {
             $file = $request->file('fileMateri');
             $fileName = $file->getClientOriginalName();
             $file->move(public_path('uploads'), $fileName);
-            $data['fileMateri'] = $fileName;
+            $materi->fileMateri = $fileName;
         }
 
-        Materi::create($data);
+        $materi->save();
 
-        return redirect()->route('guru.materi')
-            ->with('success', 'Data materi berhasil ditambahkan.');
+        return redirect()->back()
+        ->with('success', 'Data materi berhasil ditambahkan.');
     }
 
-    public function show($id)
+    public function showGuru($id)
+    {
+        $materi = Materi::findOrFail($id);
+        return view('guru.materi', compact('materi'));
+    }
+
+    public function showSiswa($id)
     {
         $materi = Materi::find($id);
+        return view('siswa.materidetail', compact('materi'));
+    }
 
-        if (!$materi) {
-            return abort(404);
-        }
-
-        return view('guru.materi', compact('materi'));
+    public function showKepsek($id)
+    {
+        $materi = Materi::find($id);
+        return view('kepsek.materidetail', compact('materi'));
     }
 
     public function edit($id)
     {
-        $materi = Materi::find($id);
+        $materi = Materi::findOrFail($id);
         return view('materi.edit', compact('materi'));
     }
 
@@ -63,39 +85,40 @@ class MateriController extends Controller
     {
         $request->validate([
             'judulMateri' => 'required|max:255',
-            'fileMateri' => 'nullable|mimes:pdf|max:20480', // 20MB limit
+            'fileMateri' => 'nullable|mimes:pdf,doc,docx,ppt,pptx|max:20480', // 20MB limit
+            'linkVideo' => 'nullable|url',
         ]);
 
-        $data = $request->only('judulMateri');
+        $materi = Materi::findOrFail($id);
+        $materi->judulMateri = $request->judulMateri;
+        $materi->linkVideo = $request->linkVideo;
 
+        // Handle file upload
         if ($request->hasFile('fileMateri')) {
             $file = $request->file('fileMateri');
             $fileName = $file->getClientOriginalName();
             $file->move(public_path('uploads'), $fileName);
-            $data['fileMateri'] = $fileName;
+            $materi->fileMateri = $fileName;
         }
 
-        Materi::where('id_materi', $id)->update($data);
+        $materi->save();
 
-        return redirect()->route('materi.index')
-            ->with('success', 'Data materi berhasil diperbarui.');
+        return redirect()->back()
+        ->with('success', 'Data materi berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {
-        $materi = Materi::find($id);
+        $materi = Materi::findOrFail($id);
 
-        if ($materi) {
-            if ($materi->fileMateri && file_exists(public_path('uploads/' . $materi->fileMateri))) {
-                unlink(public_path('uploads/' . $materi->fileMateri));
-            }
-
-            $materi->delete();
-
-            return redirect()->route('materi.index')
-                ->with('success', 'Data materi berhasil dihapus.');
-        } else {
-            return abort(404);
+        if ($materi->fileMateri && file_exists(public_path('uploads/' . $materi->fileMateri))) {
+            unlink(public_path('uploads/' . $materi->fileMateri));
         }
+
+        $materi->delete();
+
+        return redirect()->back()
+            ->with('success', 'Data materi berhasil dihapus.');
     }
 }

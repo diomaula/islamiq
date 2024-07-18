@@ -66,11 +66,6 @@
                   Jelajahi semua fitur yang ada seperti upload materi dan latihan soal, 
                   serta melihat report hasil pembelajaran siswa untuk mengukur tingkat kepahaman siswa. 
                   Yuk coba aplikasi IslamiQ sekarang!</p>
-
-                  <button class="button-lg-primary">Informasi Lainnya</button>
-                  <a href="#">
-                    <img src="Assets/Right Arrow lg.png" alt="">
-                  </a>
             </div>
           </div>
 

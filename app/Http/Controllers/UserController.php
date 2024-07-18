@@ -12,37 +12,40 @@ class UserController extends Controller
 {
     public function index()
     {
+        $title = "Admin || User";
         $users = User::paginate(5);
         return view('admin.user', compact('users'));
     }
 
-    public function create()
-    {
-        return view('user.create');
-    }
+    // public function create()
+    // {
+    //     return view('user.create');
+    // }
 
     public function store(Request $request)
     {
         $request->validate([
             'ni' => 'required|numeric|unique:users',
+            'namaLengkap' => 'required',
             'password' => 'required',
             'role' => 'required|in:guru,siswa,kepsek',
         ]);
 
         $user = User::create([
             'ni' => $request->ni,
+            'namaLengkap' => $request->namaLengkap,
             'password' => $request->password,
             'role' => $request->role,
         ]);
 
-        return redirect()->route('admin.user')->with('success', 'Data User berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Data User berhasil ditambahkan.');
     }
 
     public function upload(Request $request)
     {
         Excel::import(new UserImport(), $request->file('file'));
     
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data User berhasil ditambahkan.');
         // dd($request->file('file'));
     }
 
@@ -79,7 +82,7 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('user.index')->with('success', 'Data User berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Data User berhasil diperbarui.');
     }
 
 
@@ -87,6 +90,6 @@ class UserController extends Controller
     {
         $user = User::find($ni);
         $user->delete();
-        return redirect()->route('user.index')->with('success', 'Data User berhasil dihapus.');
+        return redirect()->back()->with('success', 'Data User berhasil dihapus.');
     }
 }

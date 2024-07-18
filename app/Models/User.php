@@ -19,6 +19,7 @@ class User extends Authenticatable
         'ni',
         'password',
         'role',
+        'namaLengkap',
     ];
 
     protected $hidden = [
@@ -53,6 +54,11 @@ class User extends Authenticatable
     public function isKepsek()
     {
         return $this->role === 'kepsek';
+    }
+
+    public function isSiswa()
+    {
+        return $this->role === 'siswa';
     }
 
     public function profil()

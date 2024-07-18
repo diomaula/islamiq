@@ -83,7 +83,7 @@ body {
     margin: auto 0;
 }
 
-.sidebar-logo a {
+.sidebar-logo h1 {
     color: #FFF;
     font-size: 1.15rem;
     font-weight: 600;
@@ -194,7 +194,7 @@ a.sidebar-link:hover {
 	grid-gap: 24px;
 	margin-top: 36px;
 }
-#content .box-info a li {
+#content .box-info li {
 	padding: 24px;
 	background: var(--light);
 	border-radius: 20px;
@@ -202,7 +202,7 @@ a.sidebar-link:hover {
 	align-items: center;
 	grid-gap: 24px;
 }
-#content .box-info a li .bx {
+#content .box-info li .bx {
 	width: 80px;
 	height: 80px;
 	border-radius: 10px;
@@ -211,24 +211,24 @@ a.sidebar-link:hover {
 	justify-content: center;
 	align-items: center;
 }
-#content .box-info a li:nth-child(1) .bx {
-	background: var(--light-blue);
-	color: var(--blue);
+#content .box-info .siswa .bx {
+    background: var(--light-blue);
+    color: var(--blue);
 }
-#content .box-info a li:nth-child(2) .bx {
-	background: var(--light-yellow);
-	color: var(--yellow);
+#content .box-info .guru .bx {
+    background: var(--light-yellow);
+    color: var(--yellow);
 }
-#content .box-info a li:nth-child(3) .bx {
-	background: var(--light-orange);
-	color: var(--orange);
+#content .box-info .user .bx {
+    background: var(--light-orange);
+    color: var(--orange);
 }
-#content .box-info a li .text h3 {
+#content .box-info li .text h3 {
 	font-size: 24px;
 	font-weight: 600;
 	color: var(--dark);
 }
-#content .box-info a li .text p {
+#content .box-info li .text p {
 	color: var(--dark);	
 }
 

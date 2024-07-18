@@ -57,10 +57,10 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="mb-3 form-check">
+                            {{-- <div class="mb-3 form-check">
                                 <input type="checkbox" class="form-check-input" id="remember">
                                 <label class="form-check-label" for="remember">Remember Me</label>
-                            </div>
+                            </div> --}}
                             <div class="d-grid">
                                 <button class="btn btn-success">Login</button>
                             </div>

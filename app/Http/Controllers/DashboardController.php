@@ -16,7 +16,7 @@ class DashboardController extends Controller
     $totalSiswa = $report->getTotalUsers('siswa');
     $totalGuru = $report->getTotalUsers('guru');
     $totalUsers = $report->getUsers();
-    $title = "Dashboard Admin";
+    $title = "Admin | Dashboard";
     
     return view('admin.dashboard', [
         'title' => $title,
@@ -42,6 +42,23 @@ public function indexKepsek()
         'totalUsers' => $totalUsers,
     ]);
 }
+
+public function guruIndex()
+    {
+        $report = new Report();
+
+        $totalSiswa = $report->getTotalUsers('siswa');
+        $totalGuru = $report->getTotalUsers('guru');
+        $totalUsers = $report->getUsers();
+        $title = "Dashboard Guru";
+
+        return view('guru.dashboard', [
+            'title' => $title,
+            'totalSiswa' => $totalSiswa,
+            'totalUsers' => $totalUsers,
+
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */

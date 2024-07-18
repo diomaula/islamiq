@@ -11,23 +11,24 @@ class Latsol extends Model
     protected $table = 'latihansoal';
     protected $primaryKey = 'id_latihan';
     protected $fillable = [
-        'id_latihan',
+        'id_tugas',
         'id_materi',
         'judulMateri',
-        'isiLatihanSoal',
-        'nilai',
-        'pilihan1',
-        'pilihan2',
-        'pilihan3',
-        'pilihan4',
+        'judulLatsol',
+        'pertanyaan',
+        'bobot_nilai',
+        'pilihanA',
+        'pilihanB',
+        'pilihanC',
+        'pilihanD',
         'jawaban',
+        'urutan_soal',
     ];
 
     public $timestamps = false;
 
-    // Fungsi untuk relasi materi dengan latihan soal --> one to many
-    public function materi()
+    public function tugas()
     {
-        return $this->belongsTo(Materi::class, 'id_materi');
+        return $this->belongsTo(Tugas::class, 'id_tugas', 'id_tugas');
     }
 }

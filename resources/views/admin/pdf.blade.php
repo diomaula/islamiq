@@ -52,6 +52,9 @@
                 <th>Nomor Induk</th>
                 <th>Tanggal Lahir</th>
                 <th>Jenis Kelamin</th>
+                @if(request()->get('showRole') == 'true')
+                <th>Role</th>
+                @endif
             </tr>
             <tbody>
                 @foreach($users as $user)
@@ -61,6 +64,9 @@
                     <td>{{ $user->ni }}</td>
                     <td>{{ \Carbon\Carbon::parse($user->tanggalLahir)->format('d-m-Y') }}</td>
                     <td>{{ $user->jenisKelamin }}</td>
+                    @if(request()->get('showRole') == 'true')
+                    <td>{{ $user->role }}</td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
