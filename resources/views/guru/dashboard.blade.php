@@ -11,7 +11,7 @@
                     <div class="mb-3">
                         <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->ni}}_{{ auth()->user()->namaLengkap}}</h2>
                         <h3 class="fw-bold fs-4 mb-3 mt-3">Dashboard</h3>
-                        <ul class="box-info">
+                        {{-- <ul class="box-info">
                             <a href="{{ route('generateUserListPDF', ['role' => 'siswa']) }}" target="_blank">           
                                 <li class="siswa">
                                     <i class='bx bxs-user'></i>
@@ -40,8 +40,17 @@
                                 </li>
                             </a>
                             
-                        </ul>
-                        
+                        </ul> --}}
+
+                        <!-- Card for Chart -->
+                        <div class="card mt-5">
+                            <div class="card-header">
+                                <h4 class="fw-bold">Materi Akses Chart</h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="materiAksesChart" width="600" height="200"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -49,6 +58,32 @@
         </div>
     </div>
     @include('layouts.script')
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        var ctx = document.getElementById('materiAksesChart').getContext('2d');
+
+        // Ambil data akses materi dari controller
+        fetch("{{ route('chart.akses') }}")
+            .then(response => response.json())
+            .then(data => {
+                var chart = new Chart(ctx, {
+                    type: 'bar', // Tipe chart bisa diubah ke 'line', 'pie', dsb.
+                    data: data,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching chart data:', error));
+    </script>
 </body>
 
 </html>

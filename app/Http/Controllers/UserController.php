@@ -26,10 +26,15 @@ class UserController extends Controller
     {
         $request->validate([
             'ni' => 'required|numeric|unique:users',
-            'namaLengkap' => 'required',
+            'namaLengkap' => ['required', 'regex:/^[\pL\s]+$/u'],
             'password' => 'required',
             'role' => 'required|in:guru,siswa,kepsek',
-        ]);
+        ], [
+            'namaLengkap.regex' => 'Nama tidak boleh angka.',
+            'ni.numeric' => 'Nomor Induk harus berupa angka.',
+            'ni.unique' => 'Nomor Induk sudah terdaftar.',
+    
+        ]);        
 
         $user = User::create([
             'ni' => $request->ni,
@@ -43,11 +48,20 @@ class UserController extends Controller
 
     public function upload(Request $request)
     {
+        // Validasi file harus berupa Excel (.xlsx atau .xls)
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ], [
+            'file.mimes' => 'File harus berupa format Excel (.xlsx atau .xls).'
+        ]);
+    
+        // Jika file valid, lakukan proses import
         Excel::import(new UserImport(), $request->file('file'));
     
+        // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Data User berhasil ditambahkan.');
-        // dd($request->file('file'));
     }
+    
 
     public function show($ni)
     {

@@ -1,88 +1,47 @@
-@foreach($latihanSoal as $index => $latihan)
-                            <div class="modal fade modal-lg" id="showModal{{$latihan->id_tugas}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Data Latihan Soal</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid my-8">
-                                                <div class="row justify-content-center">
-                                                    <div class="container-fluid">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div>
-                                                                    ID Tugas: {{ $latihan->id_tugas }}
-                                                                </div>
-                                                                <div>
-                                                                    ID latian: {{ $latihan->id_latihan }}
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Materi :</strong>
-                                                                        {{ $latihan->judulMateri }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Judul Latihan :</strong>
-                                                                        {{ $latihan->judulLatsol }}
-                                                                    </div>
-                                                                </div>
-                                                                
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Pertanyaan :</strong>
-                                                                        {{ $latihan->pertanyaan }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Nilai :</strong>
-                                                                        {{ $latihan->bobot_nilai }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Pilihan 1 :</strong>
-                                                                        {{ $latihan->pilihanA }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Pilihan 2 :</strong>
-                                                                        {{ $latihan->pilihanB }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Pilihan 3 :</strong>
-                                                                        {{ $latihan->pilihanC }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Pilihan 4 :</strong>
-                                                                        {{ $latihan->pilihanD }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <strong>Jawaban :</strong>
-                                                                        {{ $latihan->jawaban }}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerjakan Soal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Kerjakan Soal</h2>
+
+        <!-- Tampilkan Soal dalam Card -->
+        <form action="{{ url('/siswa/latihan/' . $id_tugas . '/submit') }}" method="POST">
+            @csrf
+
+            @foreach ($soalList as $soal)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Soal {{ $loop->iteration }}</h5>
+                        <p class="card-text">{{ $soal->pertanyaan }}</p>
+                        <div>
+                            <input type="radio" name="soal_{{ $soal->id }}" value="A" id="q{{ $soal->id }}a">
+                            <label for="q{{ $soal->id }}a">{{ $soal->pilihanA }}</label><br>
+
+                            <input type="radio" name="soal_{{ $soal->id }}" value="B" id="q{{ $soal->id }}b">
+                            <label for="q{{ $soal->id }}b">{{ $soal->pilihanB }}</label><br>
+
+                            <input type="radio" name="soal_{{ $soal->id }}" value="C" id="q{{ $soal->id }}c">
+                            <label for="q{{ $soal->id }}c">{{ $soal->pilihanC }}</label><br>
+
+                            <input type="radio" name="soal_{{ $soal->id }}" value="D" id="q{{ $soal->id }}d">
+                            <label for="q{{ $soal->id }}d">{{ $soal->pilihanD }}</label><br>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

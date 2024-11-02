@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -15,11 +12,18 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $primaryKey = 'ni';
+    public $incrementing = false; // Agar Laravel tahu bahwa 'ni' bukan auto-increment
+    protected $keyType = 'string'; // Jika 'ni' adalah string, sesuaikan tipe datanya
+
     protected $fillable = [
         'ni',
         'password',
         'role',
         'namaLengkap',
+        'tanggalLahir',
+        'jenisKelamin',
+        'kelas',
+        'image',
     ];
 
     protected $hidden = [
@@ -29,9 +33,11 @@ class User extends Authenticatable
 
     protected $casts = [
         'password' => 'hashed',
-        'ni' => 'integer',
     ];
 
+    public $timestamps = false;
+
+    // Override toArray jika perlu mengubah casting 'ni' menjadi integer
     public function toArray()
     {
         $array = parent::toArray();
@@ -39,8 +45,7 @@ class User extends Authenticatable
         return $array;
     }
 
-    public $timestamps = false;
-
+    // Method untuk menentukan apakah user adalah admin
     public function isAdmin()
     {
         return $this->role === 'admin';
@@ -61,8 +66,21 @@ class User extends Authenticatable
         return $this->role === 'siswa';
     }
 
+    // Relasi ke profil (bisa diubah ke relasi lain jika perlu)
     public function profil()
     {
-        return $this->hasMany(Profile::class, 'ni');
+        return $this->hasMany(Profile::class, 'ni', 'ni'); // Misalkan ada tabel 'profil'
+    }
+
+    // Relasi ke tabel nilai
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'ni', 'ni');
+    }
+
+    // Relasi ke tabel materi akses
+    public function materiAkses()
+    {
+        return $this->hasMany(MateriAkses::class, 'ni', 'ni');
     }
 }

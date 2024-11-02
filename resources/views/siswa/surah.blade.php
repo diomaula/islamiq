@@ -54,7 +54,7 @@
                             @endif
                             <!-- Pagination Links -->
                             <div class="d-flex justify-content-center">
-                                {{ $paginator->links('siswa.paginate') }}
+                                {{ $paginator->links('layouts.paginate') }}
                             </div>
                         </div>
                         <script>
@@ -75,6 +75,7 @@
         </div>
     </div>
     </main>
+    @include('layouts.footer')
     </div>
     @include('layouts.script')
 </body>

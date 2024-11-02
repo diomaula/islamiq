@@ -43,6 +43,7 @@
                     </div>
                 </div>
             </main>
+            @include('layouts.footer')
         </div>
     </div>
     @include('layouts.script')

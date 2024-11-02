@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Materi;
+use App\Models\MateriAkses;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
@@ -24,6 +26,21 @@ class MateriController extends Controller
     {
         $materis = Materi::paginate(5);
         return view('kepsek.materi', compact('materis'));
+    }
+
+    public function recordAccess($materiId)
+    {
+        // Merekam akses pengguna ke materi
+        MateriAkses::updateOrCreate(
+            [
+                'id_materi' => $materiId,
+                'ni' => auth()->user()->ni, // Ambil NIS siswa yang sedang login
+            ],
+            [
+                'status' => 'dibaca', // Misalnya status akses
+                'akses_timestamp' => now(), // Waktu akses
+            ]
+        );
     }
 
     public function create()
@@ -54,7 +71,7 @@ class MateriController extends Controller
         $materi->save();
 
         return redirect()->back()
-        ->with('success', 'Data materi berhasil ditambahkan.');
+            ->with('success', 'Data materi berhasil ditambahkan.');
     }
 
     public function showGuru($id)
@@ -66,8 +83,13 @@ class MateriController extends Controller
     public function showSiswa($id)
     {
         $materi = Materi::find($id);
+
+        // Rekam akses siswa ke materi
+        $this->recordAccess($id);
+
         return view('siswa.materidetail', compact('materi'));
     }
+
 
     public function showKepsek($id)
     {
@@ -104,7 +126,16 @@ class MateriController extends Controller
         $materi->save();
 
         return redirect()->back()
-        ->with('success', 'Data materi berhasil diperbarui.');
+            ->with('success', 'Data materi berhasil diperbarui.');
+    }
+
+    public function accessStatistics()
+    {
+        $akses = MateriAkses::select('id_materi', DB::raw('count(*) as total_akses'))
+            ->groupBy('id_materi')
+            ->get();
+
+        return view('dashboard', compact('akses'));
     }
 
 
@@ -120,5 +151,39 @@ class MateriController extends Controller
 
         return redirect()->back()
             ->with('success', 'Data materi berhasil dihapus.');
+    }
+
+    public function getAccessData()
+    {
+        // Mengambil data akses materi dari database
+        $aksesData = MateriAkses::select('id_materi', DB::raw('COUNT(*) as total_akses'))
+            ->groupBy('id_materi')
+            ->get();
+
+        // Mengambil judul materi untuk ditampilkan di chart
+        $materiTitles = Materi::whereIn('id_materi', $aksesData->pluck('id_materi'))
+            ->pluck('judulMateri', 'id_materi')
+            ->toArray();
+
+        // Format data untuk chart.js
+        $chartData = [
+            'labels' => [],
+            'datasets' => [
+                [
+                    'label' => 'Total Akses',
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'borderWidth' => 1,
+                    'data' => []
+                ]
+            ]
+        ];
+
+        foreach ($aksesData as $akses) {
+            $chartData['labels'][] = $materiTitles[$akses->id_materi];
+            $chartData['datasets'][0]['data'][] = $akses->total_akses;
+        }
+
+        return response()->json($chartData);
     }
 }

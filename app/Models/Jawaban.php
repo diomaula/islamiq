@@ -5,24 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Nilai extends Model
+class Jawaban extends Model
 {
     use HasFactory;
 
-    protected $table = 'nilai';  // Nama tabel
+    protected $table = 'jawaban';  // Nama tabel jawaban siswa
     public $timestamps = false;  // Jika tidak ada kolom `created_at` atau `updated_at`
     protected $fillable = [
-        'id_tugas',  // Foreign key ke tabel latihansoal
-        'ni',          // Nomor Induk Siswa (foreign key ke users)
-        'nilai',       // Nilai akhir siswa
+        'id_soal',    // Foreign key ke tabel soal
+        'ni',         // Nomor Induk Siswa (foreign key ke users)
+        'jawaban',    // Jawaban siswa untuk soal tersebut
     ];
 
     /**
-     * Relasi ke tabel Latihansoal (Many-to-One).
+     * Relasi ke tabel Soal (Many-to-One).
      */
-    public function latihansoal()
+    public function soal()
     {
-        return $this->belongsTo(Latsol::class, 'id_latihan', 'id_latihan');
+        return $this->belongsTo(Soal::class, 'id_soal', 'id_soal');
     }
 
     /**

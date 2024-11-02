@@ -58,7 +58,7 @@
 
                                 <!-- Pagination Links -->
                                 <div class="d-flex justify-content-center">
-                                    {{ $materis->links('guru.paginate') }}
+                                    {{ $materis->links('layouts.paginate') }}
                                 </div>
 
                             </div>

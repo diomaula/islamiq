@@ -17,7 +17,7 @@ class QuranController extends Controller
 
             $suratsArray = $surat['data'];
             $page = $request->input('page', 1);
-            $perPage = 6;
+            $perPage = 10;
             $keyword = $request->input('keyword');
 
             $surats = collect($suratsArray);

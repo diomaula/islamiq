@@ -37,7 +37,7 @@ class AuthController extends Controller
                 return redirect()->route('dashboardkepsek');
             } elseif (auth()->user()->isSiswa()) {
                 // Jika peran adalah 'kepsek', redirect ke halaman home
-                return redirect()->route('siswa.materi.index');
+                return redirect()->route('dashboardsiswa');
             } else {
                 // Jika peran bukan 'guru' atau 'kepsek', akan ditampilkan pesan error
                 return back()->with('error', 'Akses ditolak. Anda tidak memiliki izin yang cukup.');
@@ -65,15 +65,20 @@ class AuthController extends Controller
     }
     
     public function logout(Request $request)
-    {
-        Auth::logout();
+{
+    // Logout pengguna
+    Auth::logout();
 
-        $request->session()->invalidate();
+    // Hapus seluruh sesi
+    $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+    // Regenerasi token CSRF untuk keamanan
+    $request->session()->regenerateToken();
 
-        return redirect()->route('login');
-    }
+    // Redirect ke halaman login dengan pesan sukses
+    return redirect()->route('login')->with('status', 'Anda telah berhasil logout!');
+}
+
 
     // public function updatePass()
     // {

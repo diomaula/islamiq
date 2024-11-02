@@ -64,12 +64,12 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     @if($surat['suratSebelumnya'])
-                                    <a href="{{ url('/surat/'.$surat['suratSebelumnya']['nomor']) }}" class="btn" style="background-color: #048853; color: white;">Surat Sebelumnya: {{ $surat['suratSebelumnya']['namaLatin'] }}</a>
+                                    <a href="{{ url('/siswa/surat/'.$surat['suratSebelumnya']['nomor']) }}" class="btn" style="background-color: #048853; color: white;">Surat Sebelumnya: {{ $surat['suratSebelumnya']['namaLatin'] }}</a>
                                     @endif
                                 </div>
                                 <div class="ml-auto">
                                     @if($surat['suratSelanjutnya'])
-                                    <a href="{{ url('/surat/'.$surat['suratSelanjutnya']['nomor']) }}" class="btn" style="background-color: #048853; color: white;">Surat Selanjutnya: {{ $surat['suratSelanjutnya']['namaLatin'] }}</a>
+                                    <a href="{{ url('/siswa/surat/'.$surat['suratSelanjutnya']['nomor']) }}" class="btn" style="background-color: #048853; color: white;">Surat Selanjutnya: {{ $surat['suratSelanjutnya']['namaLatin'] }}</a>
                                     @endif
                                 </div>
                             </div>
@@ -77,6 +77,7 @@
                     </div>
                 </div>
             </main>
+            @include('layouts.footer')
         </div>
     </div>
     @include('layouts.script')
