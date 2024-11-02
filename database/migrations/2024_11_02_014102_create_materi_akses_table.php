@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('materi_akses', function (Blueprint $table) {
             $table->id('id_materi_akses');
-            $table->foreignId('id_materi')->constrained('materi');
-            $table->foreignId('ni')->constrained('users');
+            $table->foreignId('id_materi')->constrained('materi','id_materi');
+            $table->foreignId('ni')->constrained('users','ni');
             $table->boolean('status');
             $table->timestamp('akses_timestamp')->nullable();
             $table->timestamps();

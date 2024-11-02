@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('nilai', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_tugas')->constrained('tugas');
-            $table->foreignId('ni')->constrained('users');
+            $table->foreignId('id_tugas')->constrained('tugas','id_tugas');
+            $table->foreignId('ni')->constrained('users','ni');
             $table->integer('nilai');
             $table->timestamps();
         });

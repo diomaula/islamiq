@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('tugas', function (Blueprint $table) {
             $table->id('id_tugas');
-            $table->foreignId('id_materi')->constrained('materi');
+            $table->foreignId('id_materi')->constrained('materi', 'id_materi');
             $table->timestamps();
         });
     }
