@@ -12,14 +12,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('materi', function (Blueprint $table) {
-            $table->id('id_materi');
-            $table->string('judulMateri');
-            $table->string('linkVideo')->nullable();
-            $table->string('fileMateri')->nullable();
-            $table->string('kelas');
+            $table->bigIncrements('id_materi');
+            $table->string('judulMateri', 255);
+            $table->string('linkVideo', 255)->nullable();
+            $table->string('fileMateri', 255)->nullable();
+            $table->string('kelas', 255);
             $table->integer('urutan');
             $table->timestamps();
         });
+        
     }
 
     /**

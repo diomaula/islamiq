@@ -12,12 +12,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nilai', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('id_tugas')->constrained('tugas','id_tugas');
-            $table->foreignId('ni')->constrained('users','ni');
-            $table->integer('nilai');
+            $table->increments('id');
+            $table->unsignedBigInteger('id_tugas');
+            $table->integer('ni');
+            $table->decimal('nilai', 5, 2);
+            $table->foreign('id_tugas')->references('id_tugas')->on('tugas')->onDelete('cascade');
+            $table->foreign('ni')->references('ni')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
+        
+        
     }
 
     /**

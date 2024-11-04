@@ -49,14 +49,14 @@
                                                         <td>{{ $latihan->judulLatsol }}</td>
                                                         <td>
                                                             <a href="{{ route('latsol.manage', $latihan->id_tugas) }}" class="btn btn-primary" style="border-radius: 10px;">
-                                                                <i class="fas fa-cogs fa-sm"></i> Manage
+                                                                Manage
                                                             </a>
                                                             
                                                             <form action="{{ route('latsol.delete', $latihan->id_latihan) }}" method="POST" style="display:inline;">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-danger" style="border-radius: 10px;" onclick="return confirm('Apakah Anda yakin ingin menghapus latihan soal ini?')">
-                                                                    <i class="fas fa-trash fa-sm"></i> Delete
+                                                                    Delete
                                                                 </button>
                                                             </form>
                                                         </td>

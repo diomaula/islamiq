@@ -44,6 +44,13 @@ class Latsol extends Model
      */
     public function nilai()
     {
-        return $this->hasMany(Nilai::class, 'id_latihan', 'id_latihan');
+        return $this->hasMany(Nilai::class, 'id_tugas', 'id_tugas')->latest();
     }
+
+    // Model Latsol.php
+    public function nilaiByUser()
+    {
+        return $this->hasOne(Nilai::class, 'id_tugas', 'id_tugas')->where('ni', auth()->id());
+    }
+
 }

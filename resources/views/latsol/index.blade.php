@@ -17,7 +17,7 @@
                     <div class="card">
                         <div class="card-body">
                             @if($latihanList->isEmpty())
-                                <div class="alert alert-info text-center">
+                                <div class="text-center">
                                     Belum ada latihan soal yang tersedia.
                                 </div>
                             @else
@@ -45,6 +45,44 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid mt-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="fw-bold fs-4 mb-0">Nilai</h1>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            @if($nilaiList->isEmpty())
+                                <div class="text-center">
+                                    Belum ada nilai yang tersedia.
+                                </div>
+                            @else
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width:20%">Nomor</th>
+                                        <th scope="col" style="width:20%">Materi</th>
+                                        <th scope="col" style="width:20%">Judul</th>
+                                        <th scope="col" style="width:20%">Nilai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($nilaiList as $index => $latihan)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $latihan->judulMateri }}</td>
+                                            <td>{{ $latihan->judulLatsol }}</td>
+                                            <td>{{ $latihan->nilaiByUser->nilai ?? 'Belum Dikerjakan' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            
                             @endif
                         </div>
                     </div>

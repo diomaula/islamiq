@@ -9,10 +9,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tugas', function (Blueprint $table) {
-            $table->id('id_tugas');
-            $table->foreignId('id_materi')->constrained('materi', 'id_materi');
+            $table->bigIncrements('id_tugas');
+            $table->unsignedBigInteger('id_materi');
+            $table->foreign('id_materi')->references('id_materi')->on('materi')->onDelete('cascade');
             $table->timestamps();
         });
+        
     }
 
     public function down()

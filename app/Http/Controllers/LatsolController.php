@@ -87,7 +87,7 @@ class LatsolController extends Controller
         // Validasi request
         $request->validate([
             'pertanyaan' => 'required',
-            'bobot_nilai' => 'required|numeric',
+            // 'bobot_nilai' => 'required|numeric',
             'pilihanA' => 'required',
             'pilihanB' => 'required',
             'pilihanC' => 'required',
@@ -98,7 +98,7 @@ class LatsolController extends Controller
         Soal::create([
             'id_tugas' => $id_tugas,
             'pertanyaan' => $request->pertanyaan,
-            'bobot_nilai' => $request->bobot_nilai,
+            // 'bobot_nilai' => $request->bobot_nilai,
             'pilihanA' => $request->pilihanA,
             'pilihanB' => $request->pilihanB,
             'pilihanC' => $request->pilihanC,
@@ -113,7 +113,8 @@ class LatsolController extends Controller
     public function submit(Request $request, $id_tugas)
     {
         $soalList = Soal::where('id_tugas', $id_tugas)->get();
-        $score = 0;
+        $totalSoal = $soalList->count(); // Jumlah total soal
+        $correctAnswers = 0; // Jumlah jawaban benar
         $ni = auth()->user()->ni; // Ambil nomor induk siswa yang sedang login
 
         foreach ($soalList as $soal) {
@@ -122,9 +123,9 @@ class LatsolController extends Controller
 
             // Validasi apakah siswa mengisi jawaban
             if ($userAnswer !== null) {
-                // Cek jika jawaban benar, tambahkan bobot nilai
+                // Cek jika jawaban benar, tambahkan ke jumlah jawaban benar
                 if ($userAnswer == $soal->jawaban) {
-                    $score += $soal->bobot_nilai;
+                    $correctAnswers++;
                 }
 
                 // Simpan jawaban siswa ke dalam tabel jawaban
@@ -136,17 +137,21 @@ class LatsolController extends Controller
             }
         }
 
+        // Hitung nilai akhir berdasarkan persentase jawaban benar
+        $score = $totalSoal > 0 ? ($correctAnswers / $totalSoal) * 100 : 0;
+
         // Simpan nilai akhir siswa ke tabel 'nilai'
         Nilai::create([
-            'id_tugas' => $id_tugas,  // Sesuaikan dengan foreign key tabel nilai
+            'id_tugas' => $id_tugas,
             'ni' => $ni,
             'nilai' => $score,
         ]);
 
         // Redirect atau tampilkan halaman hasil
-        return view('latsol.result', compact('score'));
+        return redirect()->route('siswa.latsol.index');
     }
 
+    
 
     // Halaman untuk siswa mengakses soal
     // public function IndexSiswa()
@@ -156,30 +161,40 @@ class LatsolController extends Controller
     // }
 
     public function index()
-    {
-        // Ambil semua latihan soal yang tersedia
-        $latihanList = Latsol::all();  // Asumsi model Latsol digunakan
+{
+    $userId = auth()->user()->ni; // Mendapatkan 'ni' pengguna yang sedang login
 
-        if ($latihanList->isEmpty()) {
-            return redirect()->back()->with('error', 'Soal belum tersedia untuk tugas ini.');
-        }
+    // Ambil latihan soal yang belum dikerjakan oleh siswa
+    $latihanList = Latsol::whereDoesntHave('nilaiByUser')->get();
 
-        // Kirim data latihan ke tampilan latsol.index
-        return view('latsol.index', compact('latihanList'));
-    }
+    // Ambil latihan soal yang sudah dikerjakan oleh siswa beserta nilai
+    $nilaiList = Latsol::whereHas('nilaiByUser')->with(['nilaiByUser'])->get();
+
+    return view('latsol.index', compact('latihanList', 'nilaiList'));
+}
+
+
+
 
 
     public function showSoal($id_tugas)
     {
         // Ambil daftar soal berdasarkan id_tugas
         $soalList = Soal::where('id_tugas', $id_tugas)->get();
+        $latihanSoal = Latsol::where('id_tugas', $id_tugas)->first(); // Ambil judul latihan soal
 
         // Pastikan soal ditemukan, jika tidak tampilkan pesan error
         if ($soalList->isEmpty()) {
             return redirect()->back()->with('error', 'Soal belum tersedia untuk tugas ini.');
         }
 
-        // Kirim data soal dan id_tugas ke tampilan Blade
-        return view('siswa.latsol', compact('soalList', 'id_tugas'));
+        // Pastikan latihan soal ditemukan, jika tidak tampilkan pesan error
+        if (!$latihanSoal) {
+            return redirect()->back()->with('error', 'Latihan soal tidak ditemukan.');
+        }
+
+        // Kirim data soal, id_tugas, dan latihanSoal ke tampilan Blade
+        return view('siswa.latsol', compact('soalList', 'id_tugas', 'latihanSoal'));
     }
+
 }

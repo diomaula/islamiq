@@ -12,12 +12,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('latihansoal', function (Blueprint $table) {
-            $table->id('id_latihan');
-            $table->foreignId('id_tugas')->constrained('tugas', 'id_tugas');
-            $table->string('judulMateri');
-            $table->string('judullatsol');
+            $table->bigIncrements('id_latihan');
+            $table->unsignedBigInteger('id_tugas');
+            $table->string('judulMateri', 255);
+            $table->string('judulLatsol', 255);
+            $table->foreign('id_tugas')->references('id_tugas')->on('tugas')->onDelete('cascade');
             $table->timestamps();
         });
+        
     }
 
     /**

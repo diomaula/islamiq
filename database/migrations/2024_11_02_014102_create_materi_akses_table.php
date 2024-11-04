@@ -12,13 +12,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('materi_akses', function (Blueprint $table) {
-            $table->id('id_materi_akses');
-            $table->foreignId('id_materi')->constrained('materi','id_materi');
-            $table->foreignId('ni')->constrained('users','ni');
-            $table->boolean('status');
-            $table->timestamp('akses_timestamp')->nullable();
+            $table->bigIncrements('id_materi_akses');
+            $table->string('ni', 255);
+            $table->string('status', 255);
+            $table->timestamp('akses_timestamp');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

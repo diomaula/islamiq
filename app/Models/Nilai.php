@@ -21,9 +21,9 @@ class Nilai extends Model
      * Relasi ke tabel Latihansoal (Many-to-One).
      */
     public function latihansoal()
-    {
-        return $this->belongsTo(Latsol::class, 'id_latihan', 'id_latihan');
-    }
+{
+    return $this->belongsTo(Latsol::class, 'id_tugas', 'id_tugas');
+}
 
     /**
      * Relasi ke tabel Users (Many-to-One).
@@ -32,4 +32,20 @@ class Nilai extends Model
     {
         return $this->belongsTo(User::class, 'ni', 'ni');
     }
+
+    public function latsol()
+{
+    return $this->belongsTo(Latsol::class, 'id_tugas', 'id_tugas');
+}
+
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
+    // public function latsol()
+    // {
+    //     return $this->belongsTo(Latsol::class); // atau jenis hubungan lain yang sesuai
+    // }
+
 }
