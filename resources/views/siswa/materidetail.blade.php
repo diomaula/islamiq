@@ -43,9 +43,9 @@
                     </div>
                 </div>
             </main>
-            @include('layouts.footer')
         </div>
     </div>
+    @include('layouts.footer')
     @include('layouts.script')
 </body>
 

@@ -1,109 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Report;
+
 use Illuminate\Http\Request;
+use App\Models\Latsol;
+use App\Models\Materi;
+use App\Models\Report;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
-{
-    $report = new Report();
-
-    $totalSiswa = $report->getTotalUsers('siswa');
-    $totalGuru = $report->getTotalUsers('guru');
-    $totalUsers = $report->getUsers();
-    $title = "Admin | Dashboard";
-    
-    return view('admin.dashboard', [
-        'title' => $title,
-        'totalSiswa' => $totalSiswa,
-        'totalGuru' => $totalGuru,
-        'totalUsers' => $totalUsers,
-    ]);
-}
-
-public function indexKepsek()
-{
-    $report = new Report();
-
-    $totalSiswa = $report->getTotalUsers('siswa');
-    $totalGuru = $report->getTotalUsers('guru');
-    $totalUsers = $report->getUsers();
-    $title = "Dashboard Kepsek";
-    
-    return view('kepsek.dashboard', [
-        'title' => $title,
-        'totalSiswa' => $totalSiswa,
-        'totalGuru' => $totalGuru,
-        'totalUsers' => $totalUsers,
-    ]);
-}
-
-public function guruIndex()
     {
         $report = new Report();
 
         $totalSiswa = $report->getTotalUsers('siswa');
         $totalGuru = $report->getTotalUsers('guru');
         $totalUsers = $report->getUsers();
-        $title = "Dashboard Guru";
-
-        return view('guru.dashboard', [
+        $title = "Admin | Dashboard";
+        
+        return view('admin.dashboard', [
             'title' => $title,
             'totalSiswa' => $totalSiswa,
+            'totalGuru' => $totalGuru,
             'totalUsers' => $totalUsers,
-
         ]);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function dashboard(Request $request)
     {
-        //
-    }
+        $role = $request->user()->role; 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $materiList = Materi::select('judulMateri')->distinct()->get();
+        $latsolList = Latsol::select('judulLatsol')->distinct()->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $view = $role === 'kepala' ? 'kepala.dashboard' : 'guru.dashboard';
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view($view, compact('materiList', 'latsolList'));
     }
 }

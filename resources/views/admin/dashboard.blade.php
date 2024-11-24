@@ -85,6 +85,6 @@
             })
             .catch(error => console.error('Error fetching chart data:', error));
     </script>
-
+    @include('layouts.footer')
 </body>
 </html>

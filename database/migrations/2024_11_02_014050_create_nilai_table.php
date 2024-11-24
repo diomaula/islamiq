@@ -12,13 +12,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nilai', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->primary();
             $table->unsignedBigInteger('id_tugas');
-            $table->integer('ni');
-            $table->decimal('nilai', 5, 2);
+            $table->unsignedBigInteger('ni')->nullable();
+            $table->decimal('nilai', 5, 2)->nullable();
             $table->foreign('id_tugas')->references('id_tugas')->on('tugas')->onDelete('cascade');
             $table->foreign('ni')->references('ni')->on('users')->onDelete('cascade');
-            $table->timestamps();
         });
         
         

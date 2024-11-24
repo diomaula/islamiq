@@ -12,17 +12,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('soal', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedBigInteger('id_tugas');
+            $table->increments('id')->primary();
+            $table->unsignedBigInteger('id_tugas')->nullable();
             $table->text('pertanyaan');
-            $table->string('pilihanA', 255);
-            $table->string('pilihanB', 255);
-            $table->string('pilihanC', 255);
-            $table->string('pilihanD', 255);
-            $table->string('jawaban', 255);
+            $table->string('pilihanA', 255)->nullable();
+            $table->string('pilihanB', 255)->nullable();
+            $table->string('pilihanC', 255)->nullable();
+            $table->string('pilihanD', 255)->nullable();
+            $table->string('jawaban', 255)->nullable();
             $table->decimal('bobot_nilai', 5, 2);
             $table->foreign('id_tugas')->references('id_tugas')->on('tugas')->onDelete('cascade');
-            $table->timestamps();
         });
         
     }

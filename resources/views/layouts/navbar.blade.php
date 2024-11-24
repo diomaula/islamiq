@@ -8,7 +8,7 @@
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown">
-                <a href="#" class="nav-icon pe-md-0">
+                <a href="{{ route('viewProfil') }}" class="nav-icon pe-md-0">
                     <img src="{{ asset('Assets/adminn.jpg') }}" class="avatar img-fluid" alt="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                 </a>
                 <!-- <div class="dropdown-menu dropdown-menu-end rounded">

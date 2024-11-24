@@ -259,10 +259,12 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 3rem;
+    bottom: 0; /* Menempel di bawah layar */
+    left: 0; /* Menempel di sisi kiri layar */
 }
 
 footer .credit {
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
     font-size: 1rem;
 }
 

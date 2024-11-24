@@ -121,6 +121,12 @@
                 <span>Latihan Soal</span>
             </a>
         </li>
+        <li class="sidebar-item">
+            <a href="{{ route('hadist') }}" class="sidebar-link">
+                <i class="fas fa-book-open"></i>
+                <span>Hadist</span>
+            </a>
+        </li>
     </ul>
     <div class="sidebar-footer">
         <a href="#" class="sidebar-link" id="logoutLink" onclick="confirmLogout(event)">

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Materi;
-use App\Models\MateriAkses;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use App\Models\MateriAkses;
+use App\Models\Materi;
 
 class MateriController extends Controller
 {
@@ -30,15 +29,14 @@ class MateriController extends Controller
 
     public function recordAccess($materiId)
     {
-        // Merekam akses pengguna ke materi
         MateriAkses::updateOrCreate(
             [
                 'id_materi' => $materiId,
-                'ni' => auth()->user()->ni, // Ambil NIS siswa yang sedang login
+                'ni' => auth()->user()->ni,
             ],
             [
-                'status' => 'dibaca', // Misalnya status akses
-                'akses_timestamp' => now(), // Waktu akses
+                'status' => 'dibaca',
+                'akses_timestamp' => now(), 
             ]
         );
     }
@@ -52,7 +50,7 @@ class MateriController extends Controller
     {
         $request->validate([
             'judulMateri' => 'required|max:255',
-            'fileMateri' => 'required|mimes:pdf|max:20480', // 20MB limit
+            'fileMateri' => 'required|mimes:pdf|max:20480', 
             'linkVideo' => 'nullable|url',
         ]);
 
@@ -60,7 +58,6 @@ class MateriController extends Controller
         $materi->judulMateri = $request->judulMateri;
         $materi->linkVideo = $request->linkVideo;
 
-        // Upload file if exists
         if ($request->hasFile('fileMateri')) {
             $file = $request->file('fileMateri');
             $fileName = $file->getClientOriginalName();
@@ -70,8 +67,7 @@ class MateriController extends Controller
 
         $materi->save();
 
-        return redirect()->back()
-            ->with('success', 'Data materi berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Data materi berhasil ditambahkan.');
     }
 
     public function showGuru($id)
@@ -90,7 +86,6 @@ class MateriController extends Controller
         return view('siswa.materidetail', compact('materi'));
     }
 
-
     public function showKepsek($id)
     {
         $materi = Materi::find($id);
@@ -107,7 +102,7 @@ class MateriController extends Controller
     {
         $request->validate([
             'judulMateri' => 'required|max:255',
-            'fileMateri' => 'nullable|mimes:pdf,doc,docx,ppt,pptx|max:20480', // 20MB limit
+            'fileMateri' => 'nullable|mimes:pdf,doc,docx,ppt,pptx|max:20480', 
             'linkVideo' => 'nullable|url',
         ]);
 
@@ -115,7 +110,6 @@ class MateriController extends Controller
         $materi->judulMateri = $request->judulMateri;
         $materi->linkVideo = $request->linkVideo;
 
-        // Handle file upload
         if ($request->hasFile('fileMateri')) {
             $file = $request->file('fileMateri');
             $fileName = $file->getClientOriginalName();
@@ -125,8 +119,7 @@ class MateriController extends Controller
 
         $materi->save();
 
-        return redirect()->back()
-            ->with('success', 'Data materi berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Data materi berhasil diperbarui.');
     }
 
     public function accessStatistics()
@@ -138,7 +131,6 @@ class MateriController extends Controller
         return view('dashboard', compact('akses'));
     }
 
-
     public function destroy($id)
     {
         $materi = Materi::findOrFail($id);
@@ -149,23 +141,19 @@ class MateriController extends Controller
 
         $materi->delete();
 
-        return redirect()->back()
-            ->with('success', 'Data materi berhasil dihapus.');
+        return redirect()->back()->with('success', 'Data materi berhasil dihapus.');
     }
 
     public function getAccessData()
     {
-        // Mengambil data akses materi dari database
         $aksesData = MateriAkses::select('id_materi', DB::raw('COUNT(*) as total_akses'))
             ->groupBy('id_materi')
             ->get();
 
-        // Mengambil judul materi untuk ditampilkan di chart
         $materiTitles = Materi::whereIn('id_materi', $aksesData->pluck('id_materi'))
             ->pluck('judulMateri', 'id_materi')
             ->toArray();
 
-        // Format data untuk chart.js
         $chartData = [
             'labels' => [],
             'datasets' => [

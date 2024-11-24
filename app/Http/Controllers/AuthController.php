@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -21,85 +20,60 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-
         $data = $request->only('ni', 'password');
 
         if (Auth::attempt($data)) {
-            // Cek peran setelah berhasil login
             if (auth()->user()->isAdmin()) {
-                // Jika peran adalah 'guru', redirect ke halaman home
                 return redirect()->route('dashboardadmin');
             } elseif (auth()->user()->isGuru()) {
-                // Jika peran adalah 'kepsek', redirect ke halaman home
                 return redirect()->route('dashboardguru');
             } elseif (auth()->user()->isKepsek()) {
-                // Jika peran adalah 'kepsek', redirect ke halaman home
                 return redirect()->route('dashboardkepsek');
             } elseif (auth()->user()->isSiswa()) {
-                // Jika peran adalah 'kepsek', redirect ke halaman home
                 return redirect()->route('dashboardsiswa');
             } else {
-                // Jika peran bukan 'guru' atau 'kepsek', akan ditampilkan pesan error
                 return back()->with('error', 'Akses ditolak. Anda tidak memiliki izin yang cukup.');
             }
         } else {
             return back()->with('error', 'nomor induk atau password salah!');
         }
-
-        // dd($data);
     }
 
     public function ubahPassword(Request $request)
     {
+        // Validasi input
+        $request->validate([
+            'passwordLama' => 'required',
+            'passwordBaru' => 'required|string|min:4|max:16|confirmed', // 'confirmed' untuk validasi dengan repeatPassword
+        ], [
+            'passwordLama.required' => 'Password lama wajib diisi.',
+            'passwordBaru.required' => 'Password baru wajib diisi.',
+            'passwordBaru.min' => 'Password harus terdiri 4-16 karakter.',
+            'passwordBaru.max' => 'Password harus terdiri 4-16 karakter.',
+            'passwordBaru.confirmed' => 'Password baru dan konfirmasi password tidak sama.',
+        ]);
+
+        // Periksa apakah password lama cocok
         if (!Hash::check($request->passwordLama, auth()->user()->password)) {
-            return back()->with('error', 'password lama tidak sesuai!');
+            return back()->with('error', 'Password lama tidak sesuai!');
         }
 
-        if ($request->passwordBaru != $request->repeatPassword) {
-            return back()->with('error', 'password baru tidak sama!');
-        }
+        // Update password
         auth()->user()->update([
             'password' => Hash::make($request->passwordBaru),
         ]);
-        return redirect()->route('viewProfil');
+
+        return redirect()->route('viewProfil')->with('success', 'Password berhasil diubah!');
     }
+
     
     public function logout(Request $request)
-{
-    // Logout pengguna
-    Auth::logout();
+    {
+        Auth::logout();
 
-    // Hapus seluruh sesi
-    $request->session()->invalidate();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    // Regenerasi token CSRF untuk keamanan
-    $request->session()->regenerateToken();
-
-    // Redirect ke halaman login dengan pesan sukses
-    return redirect()->route('login')->with('status', 'Anda telah berhasil logout!');
-}
-
-
-    // public function updatePass()
-    // {
-    //     $user = auth()->user();
-
-    //     $bks = User::find($user->ni);
-    //     return view('auth.password', compact('bks'));
-    // }
-
-    // public function ubahPassword(Request $request)
-    // {
-    //     if (!Hash::check($request->passwordLama, auth()->user()->password)) {
-    //         return back()->with('error', 'password lama tidak sesuai!');
-    //     }
-
-    //     if ($request->passwordBaru != $request->repeatPassword) {
-    //         return back()->with('error', 'password baru tidak sama!');
-    //     }
-    //     auth()->user()->update([
-    //         'password' => Hash::make($request->passwordBaru),
-    //     ]);
-    //     return redirect()->route('viewProfil');
-    // }
+        return redirect()->route('login')->with('status', 'Anda telah berhasil logout!');
+    }
 }

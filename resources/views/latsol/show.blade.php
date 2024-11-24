@@ -14,4 +14,5 @@
         @endforeach
         <button type="submit">Submit</button>
     </form>
+    @include('layouts.footer')
 @endsection

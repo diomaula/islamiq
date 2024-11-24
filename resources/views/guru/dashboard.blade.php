@@ -58,7 +58,7 @@
                                                 @foreach($reportData as $index => $data)
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $data->siswa ? $data->siswa->namaLengkap : '-' }}</td>
+                                                        <td>{{ $data->siswa->namaLengkap ?? '-' }}</td>
                                                         <td>{{ $data->latihansoal->judulMateri ?? '-' }}</td>
                                                         <td>{{ $data->latihansoal->judulLatsol ?? '-' }}</td>
                                                         <td>{{ $data->nilai }}</td>
@@ -75,10 +75,8 @@
 
                         <!-- Card for Chart -->
                         @if(Auth::user()->role == 'guru')
-                        <div class="card mt-5">
-                            <div class="card-header">
-                                <h4 class="fw-bold">Materi Akses Chart</h4>
-                            </div>
+                        <h4 class="fw-bold mt-5">Grafik Akses Materi</h4>
+                        <div class="card">
                             <div class="card-body">
                                 <canvas id="materiAksesChart" width="600" height="200"></canvas>
                             </div>
@@ -116,5 +114,7 @@
             })
             .catch(error => console.error('Error fetching chart data:', error));
     </script>
+
+    @include('layouts.footer')
 </body>
 </html>

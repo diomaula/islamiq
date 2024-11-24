@@ -23,12 +23,10 @@
                         </div>
                     </div>
 
-                    <!-- Notifikasi -->
                     <div id="notification" class="notification" style="display: none;">
                         Sudah memasuki waktu shalat!
                     </div>
 
-                    <!-- Tabel Waktu Shalat -->
                     <table>
                         <tr>
                             <th>Shalat</th>
@@ -70,7 +68,6 @@
     @include('layouts.script')
 
     <script>
-        // Ambil waktu sholat dari tabel
         const times = {
             Fajr: document.getElementById('Fajr').innerText,
             Dhuhr: document.getElementById('Dhuhr').innerText,
@@ -79,12 +76,10 @@
             Isha: document.getElementById('Isha').innerText,
         };
 
-        // Ambil waktu sekarang dari server Laravel
         const now = new Date("{{ $now }}");
 
-        // Fungsi untuk menghitung waktu mundur
         function updateCountdown() {
-            const now = new Date(); // Perbarui waktu sekarang setiap kali fungsi dijalankan
+            const now = new Date(); 
 
             const prayerTimes = Object.values(times).map(time => {
                 const [hours, minutes] = time.split(':').map(Number);
@@ -104,35 +99,31 @@
             const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
-            document.getElementById('time-remaining').innerText =
-                ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')};
+            document.getElementById('time-remaining').innerText = 
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
         }
 
-        // Fungsi untuk mengecek apakah waktu shalat sudah tiba
         function checkPrayerTimes() {
-            const now = new Date(); // Perbarui waktu sekarang
+            const now = new Date();
 
             Object.keys(times).forEach((prayer) => {
                 const [hours, minutes] = times[prayer].split(':').map(Number);
                 const prayerTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
 
-                // Cek apakah waktu shalat sudah tiba
                 if (Math.abs(prayerTime - now) < 1000) {
-                    // Tampilkan notifikasi jika waktu sekarang cocok dengan waktu shalat
                     document.getElementById('notification').style.display = 'block';
 
-                    // Tambahkan suara notifikasi (opsional)
-                    const audio = new Audio("{{ asset('assets/azdan.mp3') }}"); // Pastikan ini adalah file audio yang benar
+                    const audio = new Audio("{{ asset('assets/azdan.mp3') }}");
                     audio.play();
                 }
             });
         }
 
-        // Jalankan fungsi update setiap detik
         setInterval(updateCountdown, 1000);
         setInterval(checkPrayerTimes, 1000);
     </script>
-
+    @include('layouts.footer')
 </body>
 
 </html>

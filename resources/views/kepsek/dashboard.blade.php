@@ -57,7 +57,7 @@
                                                 @foreach($reportData as $index => $data)
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $data->siswa ? $data->siswa->namaLengkap : '-' }}</td>
+                                                        <td>{{ $data->siswa->namaLengkap : '-' }}</td>
                                                         <td>{{ $data->latihansoal->judulMateri ?? '-' }}</td>
                                                         <td>{{ $data->latihansoal->judulLatsol ?? '-' }}</td>
                                                         <td>{{ $data->nilai }}</td>
@@ -78,6 +78,7 @@
             
         </div>
     </div>
+    @include('layouts.footer')
 </body>
 
 </html>

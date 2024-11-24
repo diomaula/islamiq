@@ -82,10 +82,10 @@
                     });
                 </script>
             </main>
-            @include('layouts.footer')
+            </div>
         </div>
-    </div>
-    @include('layouts.script')
+            @include('layouts.script')
+            @include('layouts.footer')
 </body>
 
 </html>
