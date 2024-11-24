@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('materi', function (Blueprint $table) {
-            $table->bigIncrements('id_materi')->primary();
+            $table->bigIncrements('id_materi');
             $table->string('judulMateri', 255);
             $table->string('linkVideo', 255)->nullable();
             $table->string('fileMateri', 255);
