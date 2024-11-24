@@ -13,16 +13,25 @@ class DoaController extends Controller
         $response = Http::get('https://equran.id/api/doa');
 
         $page = $request->input('page', 1);
-        $perPage = 6;
+        $perPage = 15;
         $keyword = $request->input('keyword');
+
+        // Daftar ID doa yang tidak diinginkan
+        $excludedDoaIds = [22, 23, 24]; 
 
         if ($response->successful()) {
             $doas = collect($response->json());
+
+            $doas = $doas->reject(function ($doa) use ($excludedDoaIds) {
+                return in_array($doa['id'], $excludedDoaIds);
+            });
+
             if ($keyword) {
                 $doas = $doas->filter(function ($doa) use ($keyword) {
                     return stripos($doa['nama'], $keyword) !== false;
                 });
             }
+
             $paginator = new LengthAwarePaginator(
                 $doas->forPage($page, $perPage),
                 $doas->count(),
@@ -31,7 +40,9 @@ class DoaController extends Controller
                 ['path' => url()->current(), 'query' => $request->query()]
             );
 
-            return view('siswa.doa', compact('paginator'));
+            $startNumber = ($paginator->currentPage() - 1) * $paginator->perPage() + 1;
+
+            return view('siswa.doa', compact('paginator', 'startNumber'));
         } else {
             return response()->json(['error' => 'Failed to fetch data from API'], 500);
         }

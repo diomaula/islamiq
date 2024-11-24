@@ -12,7 +12,6 @@ class ReportController extends Controller
 {
     public function generateUserListPDF($role)
     {
-        // Ambil hanya user dengan role yang sesuai
         $users = User::where('role', $role)->get();
 
         $data = [
@@ -23,8 +22,7 @@ class ReportController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('admin.pdf', $data);
 
-        return $pdf->stream($role . '_user_list.pdf');
-        
+        return $pdf->stream($role . '_user_list.pdf');      
     }
 
     public function cetakUsers()

@@ -46,10 +46,11 @@ body {
     flex-direction: column;
     min-height: 100vh;
     width: 100%;
-    overflow: hidden;
-    transition: all 0.35s ease-in-out;
+    margin-left: 70px; /* Space for the sidebar */
+    overflow-y: auto; /* Allow content scrolling */
     background-color: var(--grey);
     min-width: 0;
+    transition: all 0.35s ease-in-out;
 }
 
 #sidebar {
@@ -60,11 +61,20 @@ body {
     background-color: #00653d;
     display: flex;
     flex-direction: column;
+    position: fixed; /* Fix the sidebar position */
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full height of screen */
+    overflow: hidden; /* No scrolling inside sidebar */
 }
 
 #sidebar.expand {
     width: 260px;
     min-width: 260px;
+}
+
+.main.expand {
+    margin-left: 260px; /* Adjust when sidebar expands */
 }
 
 .toggle-btn {
@@ -176,6 +186,9 @@ a.sidebar-link:hover {
 .navbar {
     background-color: #f5f5f5;
     box-shadow: 0 0 2rem 0 rgba(33, 37, 41, .1);
+    position: sticky; /* Keeps the navbar fixed at the top */
+    top: 0;
+    z-index: 999;
 }
 
 .navbar-expand .navbar-collapse {
@@ -187,13 +200,13 @@ a.sidebar-link:hover {
     width: 40px;
 }
 
-
 #content .box-info {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 	grid-gap: 24px;
 	margin-top: 36px;
 }
+
 #content .box-info li {
 	padding: 24px;
 	background: var(--light);
@@ -202,6 +215,7 @@ a.sidebar-link:hover {
 	align-items: center;
 	grid-gap: 24px;
 }
+
 #content .box-info li .bx {
 	width: 80px;
 	height: 80px;
@@ -211,26 +225,50 @@ a.sidebar-link:hover {
 	justify-content: center;
 	align-items: center;
 }
+
 #content .box-info .siswa .bx {
     background: var(--light-blue);
     color: var(--blue);
 }
+
 #content .box-info .guru .bx {
     background: var(--light-yellow);
     color: var(--yellow);
 }
+
 #content .box-info .user .bx {
     background: var(--light-orange);
     color: var(--orange);
 }
+
 #content .box-info li .text h3 {
 	font-size: 24px;
 	font-weight: 600;
 	color: var(--dark);
 }
+
 #content .box-info li .text p {
 	color: var(--dark);	
 }
 
-
 @media (min-width: 768px) {}
+
+footer {
+    background-color: white;
+    /* border-top: 1px solid; */
+    text-align: center;
+    padding: 1rem;
+    margin-top: 3rem;
+    bottom: 0; /* Menempel di bawah layar */
+    left: 0; /* Menempel di sisi kiri layar */
+}
+
+footer .credit {
+    /* margin-top: 1rem; */
+    font-size: 1rem;
+}
+
+footer .credit a {
+    color: #25D366;
+    font-weight: 700;
+}

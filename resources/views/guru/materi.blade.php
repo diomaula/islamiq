@@ -7,11 +7,28 @@
         @include('layouts.sidebar')
         <div class="main">
             @include('layouts.navbar')
-            @if(@session()->has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
+            @if ($errors->has('fileMateri'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Format file tidak valid',
+                        text: 'Hanya file PDF yang diperbolehkan.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
             @endif
+
+            @if(session('success'))
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: '{{ session('success') }}',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @endif
+
             <main class="content px-3 py-4">
                 <div class="container-fluid">
                     <div class="mb-3">
@@ -24,7 +41,7 @@
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Id Materi</th>
+                                            <th scope="col">No</th>
                                             <th scope="col">Judul Materi</th>
                                             <th scope="col">File Materi</th>
                                             <th scope="col">Action</th>
@@ -33,7 +50,7 @@
                                     <tbody>
                                         @foreach($materis as $materi)
                                         <tr>
-                                            <td>{{ $materi->id_materi }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $materi->judulMateri }}</td>
                                             <td>{{ $materi->fileMateri }}</td>
                                             <td class="table-actions">
@@ -58,7 +75,7 @@
 
                                 <!-- Pagination Links -->
                                 <div class="d-flex justify-content-center">
-                                    {{ $materis->links('guru.paginate') }}
+                                    {{ $materis->links('layouts.paginate') }}
                                 </div>
 
                             </div>
@@ -214,7 +231,7 @@
                                                             <div class="col-xs-12 col-sm-12 col-md-12">
                                                                 <div class="form-group">
                                                                     <label for="fileMateri">File Materi:</label>
-                                                                    <input type="file" class="form-control" id="fileMateri" name="fileMateri" accept=".pdf,.doc,.docx,.ppt,.pptx">
+                                                                    <input type="file" class="form-control" id="fileMateri" name="fileMateri" value="{{ $materi->fileMateri }}" accept=".pdf,.doc,.docx,.ppt,.pptx">
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-12 col-sm-12 col-md-12">
@@ -242,6 +259,7 @@
         </div>
     </div>
     @include('layouts.script')
+    @include('layouts.footer')
 </body>
 
 </html>

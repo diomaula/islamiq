@@ -3,32 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Jawaban;
 use App\Models\Latsol;
 use App\Models\Materi;
 use App\Models\Nilai;
 use App\Models\Tugas;
+use App\Models\Soal;
 
 class LatsolController extends Controller
 {
     public function latsol()
     {
+        $latihanSoal = Latsol::with('tugas')->get();
+        $materis = Materi::all();
         $tugas = Tugas::all();
 
-        if ($tugas->isEmpty()) {
-            $latihanSoal = Latsol::all();
-            return view('guru.latsol', compact('latihanSoal', 'materis', 'tugas'));
-        }
-        
-        // $latihanSoal = Latsol::all();
-        $latihanSoal = Latsol::select('id_tugas',
-            DB::raw('MAX(id_latihan) as id_latihan'), 
-            DB::raw('MIN(judulMateri) as judulMateri'), 
-            DB::raw('MIN(judulLatsol) as judulLatsol'))
-            ->groupBy('id_tugas')
-            ->get();
-        
-        $materis = Materi::all();
         return view('guru.latsol', compact('latihanSoal', 'materis', 'tugas'));
     }
 
@@ -37,91 +26,127 @@ class LatsolController extends Controller
         $request->validate([
             'judulMateri' => 'required',
             'judulLatsol' => 'required',
-            'pertanyaan.*' => 'required',
-            'bobot_nilai.*' => 'required|numeric',
-            'pilihanA.*' => 'required',
-            'pilihanB.*' => 'required',
-            'pilihanC.*' => 'required',
-            'pilihanD.*' => 'required',
-            'jawaban.*' => 'required',
         ]);
 
-        $judulMateri = $request->judulMateri;
-        $judulLatsol = $request->judulLatsol;
-        $jumlah_soal = $request->jumlah_soal;
-        $materi = Materi::where('judulMateri', $judulMateri)->first();
+        $materi = Materi::where('judulMateri', $request->judulMateri)->first();
 
-        $id_materi = $materi->id_materi;
-
-        $tugas = Tugas::create([
-            'id_materi' => $id_materi,
-        ]);
-
-        $latsol = new Latsol();
-        for ($i = 0; $i < $jumlah_soal; $i++) {
-            Latsol::create([
-                'judulMateri' => $judulMateri,
-                'judulLatsol' => $judulLatsol,
-                'pertanyaan' => $request->pertanyaan[$i],
-                'bobot_nilai' => $request->bobot_nilai[$i],
-                'pilihanA' => $request->pilihanA[$i],
-                'pilihanB' => $request->pilihanB[$i],
-                'pilihanC' => $request->pilihanC[$i],
-                'pilihanD' => $request->pilihanD[$i],
-                'jawaban' => $request->jawaban[$i],
-                'id_tugas' => $tugas->id_tugas,
-            ]);
+        if (!$materi) {
+            return redirect()->back()->withErrors(['error' => 'Materi tidak ditemukan.']);
         }
 
-        return redirect()->back()->with('status', 'Data latihan soal berhasil ditambahkan.');
-    }
+        $tugas = Tugas::create(['id_materi' => $materi->id_materi]);
 
+        Latsol::create([
+            'judulMateri' => $request->judulMateri,
+            'judulLatsol' => $request->judulLatsol,
+            'id_tugas' => $tugas->id_tugas,
+        ]);
+
+        return redirect()->back()->with('status', 'Judul latihan soal berhasil ditambahkan.');
+    }
+  
+    public function destroy($id)
+    {
+        $latihansoal = Latsol::findOrFail($id);
+        $latihansoal->delete();
+
+        return redirect()->back()->with('status', 'Latihan soal berhasil dihapus.');
+    }
 
     public function show($id_tugas)
     {
-        $tugas = Tugas::find($id_tugas);
-        $latihanSoal = Latsol::where('id_tugas', $tugas->id)->get();
-        $soals = Latsol::where('id_tugas', $latihanSoal)->get();
-        dd($soals);
+        $tugas = Tugas::with('latsols')->find($id_tugas); 
 
-        // return view('latsol.show', compact('tugas', 'latihanSoal', 'soals'));
+        if (!$tugas) {
+            return redirect()->route('latsol')->with('error', 'Tugas tidak ditemukan.');
+        }
+
+        $soal = Soal::where('id_tugas', $id_tugas)->get();
+
+        return view('guru.manage', compact('tugas', 'soal'));
     }
 
-    public function update(Request $request, $id_latihan)
+    public function storeSoal(Request $request, $id_tugas)
     {
         $request->validate([
-            'judulMateri' => 'required',
-            'isiLatihanSoal' => 'required',
-            'nilai' => 'required|numeric',
-            'pilihan1' => 'required',
-            'pilihan2' => 'required',
-            'pilihan3' => 'required',
-            'pilihan4' => 'required',
-            'jawaban' => 'required',
+            'pertanyaan' => 'required',
+            'pilihanA' => 'required',
+            'pilihanB' => 'required',
+            'pilihanC' => 'required',
+            'pilihanD' => 'required',
+            'jawaban' => 'required|in:A,B,C,D',
         ]);
 
-        $latihanSoal = Latsol::find($id_latihan);
-
-        $latihanSoal->update([
-            'judulMateri' => $request->judulMateri,
-            'isiLatihanSoal' => $request->isiLatihanSoal,
-            'nilai' => $request->nilai,
-            'pilihan1' => $request->pilihan1,
-            'pilihan2' => $request->pilihan2,
-            'pilihan3' => $request->pilihan3,
-            'pilihan4' => $request->pilihan4,
+        Soal::create([
+            'id_tugas' => $id_tugas,
+            'pertanyaan' => $request->pertanyaan,
+            'pilihanA' => $request->pilihanA,
+            'pilihanB' => $request->pilihanB,
+            'pilihanC' => $request->pilihanC,
+            'pilihanD' => $request->pilihanD,
             'jawaban' => $request->jawaban,
         ]);
 
-        return redirect()->route('latsol')->with('success', 'Data latihan soal berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Soal berhasil ditambahkan.');
     }
 
-    public function destroy($id_tugas)
+    public function submit(Request $request, $id_tugas)
     {
-        $bks = Latsol::find($id_tugas);
+        $soalList = Soal::where('id_tugas', $id_tugas)->get();
+        $totalSoal = $soalList->count(); 
+        $correctAnswers = 0; 
+        $ni = auth()->user()->ni; 
 
-        $bks->delete();
+        foreach ($soalList as $soal) {
+            $userAnswer = $request->input('soal_' . $soal->id);
 
-        return redirect()->route('latsol')->with('success', 'Data latihan soal berhasil dihapus.');
+            if ($userAnswer !== null) {
+                if ($userAnswer == $soal->jawaban) {
+                    $correctAnswers++;
+                }
+
+                Jawaban::create([
+                    'id_soal' => $soal->id,
+                    'ni' => $ni,
+                    'jawaban_siswa' => $userAnswer,
+                ]);
+            }
+        }
+
+        $score = $totalSoal > 0 ? ($correctAnswers / $totalSoal) * 100 : 0;
+
+        Nilai::create([
+            'id_tugas' => $id_tugas,
+            'ni' => $ni,
+            'nilai' => $score,
+        ]);
+
+        return redirect()->route('siswa.latsol.index');
     }
+
+    public function index()
+    {
+        $userId = auth()->user()->ni;
+        $latihanList = Latsol::whereDoesntHave('nilaiByUser')->get();
+        $nilaiList = Latsol::whereHas('nilaiByUser')->with(['nilaiByUser'])->get();
+
+        return view('latsol.index', compact('latihanList', 'nilaiList'));
+    }
+
+    public function showSoal($id_tugas)
+    {
+        $soalList = Soal::where('id_tugas', $id_tugas)->get();
+        $latihanSoal = Latsol::where('id_tugas', $id_tugas)->first(); 
+
+        if ($soalList->isEmpty()) {
+            return redirect()->back()->with('error', 'Soal belum tersedia untuk tugas ini.');
+        }
+
+        if (!$latihanSoal) {
+            return redirect()->back()->with('error', 'Latihan soal tidak ditemukan.');
+        }
+
+        return view('siswa.latsol', compact('soalList', 'id_tugas', 'latihanSoal'));
+    }
+
 }

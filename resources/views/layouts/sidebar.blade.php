@@ -22,10 +22,9 @@
                 <span>User</span>
             </a>
         </li>
-        
     </ul>
     <div class="sidebar-footer">
-        <a href="#" class="sidebar-link" id="logoutLink">
+        <a href="#" class="sidebar-link" id="logoutLink" onclick="confirmLogout(event)">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
         </a>
@@ -33,14 +32,8 @@
             @csrf
         </form>
     </div>
-    
-    <script>
-        document.getElementById('logoutLink').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('logoutForm').submit();
-        });
-    </script>
 </aside>
+
 @endcan
 
 <! -- Guru -->
@@ -75,7 +68,7 @@
         </li>
     </ul>
     <div class="sidebar-footer">
-        <a href="#" class="sidebar-link" id="logoutLink">
+        <a href="#" class="sidebar-link" id="logoutLink" onclick="confirmLogout(event)">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
         </a>
@@ -83,13 +76,7 @@
             @csrf
         </form>
     </div>
-    
-    <script>
-        document.getElementById('logoutLink').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('logoutForm').submit();
-        });
-    </script>
+
 </aside>
 @endcan
 
@@ -104,6 +91,12 @@
         </div>
     </div>
     <ul class="sidebar-nav">
+        <li class="sidebar-item">
+            <a href="{{ route('dashboardsiswa') }}" class="sidebar-link">
+                <i class="lni lni-dashboard"></i>
+                <span>Waktu Shalat</span>
+            </a>
+        </li>
         <li class="sidebar-item">
             <a href="{{ route ('siswa.materi.index') }}" class="sidebar-link">
                 <i class="lni lni-book"></i>
@@ -122,15 +115,21 @@
                 <span>Doa - Doa</span>
             </a>
         </li>
-        {{-- <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+        <li class="sidebar-item">
+            <a href="{{ route ('siswa.latsol.index') }}" class="sidebar-link">
                 <i class="lni lni-pencil-alt"></i>
                 <span>Latihan Soal</span>
             </a>
-        </li> --}}
+        </li>
+        <li class="sidebar-item">
+            <a href="{{ route('hadist') }}" class="sidebar-link">
+                <i class="fas fa-book-open"></i>
+                <span>Hadist</span>
+            </a>
+        </li>
     </ul>
     <div class="sidebar-footer">
-        <a href="#" class="sidebar-link" id="logoutLink">
+        <a href="#" class="sidebar-link" id="logoutLink" onclick="confirmLogout(event)">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
         </a>
@@ -139,12 +138,7 @@
         </form>
     </div>
 
-    <script>
-        document.getElementById('logoutLink').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('logoutForm').submit();
-        });
-    </script>
+
 </aside>
 @endcan
 
@@ -173,7 +167,7 @@
         </li>
     </ul>
     <div class="sidebar-footer">
-        <a href="#" class="sidebar-link" id="logoutLink">
+        <a href="#" class="sidebar-link" id="logoutLink" onclick="confirmLogout(event)">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
         </a>
@@ -181,12 +175,5 @@
             @csrf
         </form>
     </div>
-    
-    <script>
-        document.getElementById('logoutLink').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('logoutForm').submit();
-        });
-    </script>
 </aside>
 @endcan

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\MateriAkses;
 use App\Models\Materi;
-use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
 {
@@ -26,6 +27,20 @@ class MateriController extends Controller
         return view('kepsek.materi', compact('materis'));
     }
 
+    public function recordAccess($materiId)
+    {
+        MateriAkses::updateOrCreate(
+            [
+                'id_materi' => $materiId,
+                'ni' => auth()->user()->ni,
+            ],
+            [
+                'status' => 'dibaca',
+                'akses_timestamp' => now(), 
+            ]
+        );
+    }
+
     public function create()
     {
         return view('materi.create');
@@ -35,7 +50,7 @@ class MateriController extends Controller
     {
         $request->validate([
             'judulMateri' => 'required|max:255',
-            'fileMateri' => 'required|mimes:pdf|max:20480', // 20MB limit
+            'fileMateri' => 'required|mimes:pdf|max:20480', 
             'linkVideo' => 'nullable|url',
         ]);
 
@@ -43,7 +58,6 @@ class MateriController extends Controller
         $materi->judulMateri = $request->judulMateri;
         $materi->linkVideo = $request->linkVideo;
 
-        // Upload file if exists
         if ($request->hasFile('fileMateri')) {
             $file = $request->file('fileMateri');
             $fileName = $file->getClientOriginalName();
@@ -53,8 +67,7 @@ class MateriController extends Controller
 
         $materi->save();
 
-        return redirect()->back()
-        ->with('success', 'Data materi berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Data materi berhasil ditambahkan.');
     }
 
     public function showGuru($id)
@@ -66,6 +79,10 @@ class MateriController extends Controller
     public function showSiswa($id)
     {
         $materi = Materi::find($id);
+
+        // Rekam akses siswa ke materi
+        $this->recordAccess($id);
+
         return view('siswa.materidetail', compact('materi'));
     }
 
@@ -85,7 +102,7 @@ class MateriController extends Controller
     {
         $request->validate([
             'judulMateri' => 'required|max:255',
-            'fileMateri' => 'nullable|mimes:pdf,doc,docx,ppt,pptx|max:20480', // 20MB limit
+            'fileMateri' => 'nullable|mimes:pdf,doc,docx,ppt,pptx|max:20480', 
             'linkVideo' => 'nullable|url',
         ]);
 
@@ -93,7 +110,6 @@ class MateriController extends Controller
         $materi->judulMateri = $request->judulMateri;
         $materi->linkVideo = $request->linkVideo;
 
-        // Handle file upload
         if ($request->hasFile('fileMateri')) {
             $file = $request->file('fileMateri');
             $fileName = $file->getClientOriginalName();
@@ -103,10 +119,17 @@ class MateriController extends Controller
 
         $materi->save();
 
-        return redirect()->back()
-        ->with('success', 'Data materi berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Data materi berhasil diperbarui.');
     }
 
+    public function accessStatistics()
+    {
+        $akses = MateriAkses::select('id_materi', DB::raw('count(*) as total_akses'))
+            ->groupBy('id_materi')
+            ->get();
+
+        return view('dashboard', compact('akses'));
+    }
 
     public function destroy($id)
     {
@@ -118,7 +141,37 @@ class MateriController extends Controller
 
         $materi->delete();
 
-        return redirect()->back()
-            ->with('success', 'Data materi berhasil dihapus.');
+        return redirect()->back()->with('success', 'Data materi berhasil dihapus.');
+    }
+
+    public function getAccessData()
+    {
+        $aksesData = MateriAkses::select('id_materi', DB::raw('COUNT(*) as total_akses'))
+            ->groupBy('id_materi')
+            ->get();
+
+        $materiTitles = Materi::whereIn('id_materi', $aksesData->pluck('id_materi'))
+            ->pluck('judulMateri', 'id_materi')
+            ->toArray();
+
+        $chartData = [
+            'labels' => [],
+            'datasets' => [
+                [
+                    'label' => 'Total Akses',
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'borderWidth' => 1,
+                    'data' => []
+                ]
+            ]
+        ];
+
+        foreach ($aksesData as $akses) {
+            $chartData['labels'][] = $materiTitles[$akses->id_materi];
+            $chartData['datasets'][0]['data'][] = $akses->total_akses;
+        }
+
+        return response()->json($chartData);
     }
 }

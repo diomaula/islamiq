@@ -1,0 +1,105 @@
+/* Font Google: Poppins untuk tampilan yang lebih modern */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.card-mb-4 {
+    border-radius: 10px;
+    /* Radius untuk card */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    background-color: #048853;
+    /* Warna hijau */
+    padding: 20px;
+    /* Padding untuk isi */
+    text-align: center;
+    /* Rata tengah untuk teks */
+    color: white;
+    /* Warna teks putih */
+    font-family: 'Poppins', sans-serif;
+    /* Font Poppins */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-body h1 {
+    color: white;
+    font-size: 24px;
+    /* Ukuran font lebih besar untuk judul */
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    /* Spasi antar huruf */
+    text-transform: uppercase;
+    /* Teks kapital */
+    font-weight: 600;
+    /* Tebalkan teks judul */
+}
+
+.card-body p {
+    color: white;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+#countdown {
+    font-weight: 600;
+    margin-top: 15px;
+    font-size: 20px;
+    color: #ffeb3b;
+}
+
+#time-remaining {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th,
+td {
+    text-align: center;
+    /* Buat teks dalam th dan td rata tengah */
+    padding: 15px;
+    /* Ruang di dalam sel */
+    font-size: 16px;
+    /* Ukuran font */
+}
+
+th {
+    background-color: #048853;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tr {
+        text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #d4ebde;
+    /* Warna latar belakang untuk baris genap */
+}
+
+tr:hover {
+    background-color: #c6c9c7;
+    /* Warna latar belakang saat hover */
+}
+
+.current-prayer {
+    font-weight: bold;
+    /* Tebalkan teks untuk waktu shalat saat ini */
+    color: #ff9800;
+    /* Warna teks untuk menandai waktu shalat saat ini */
+}

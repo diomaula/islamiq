@@ -11,7 +11,7 @@
             @include('layouts.navbar')
             <main class="content px-3 py-4">
                 <div class="container-fluid">
-                    <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->ni}}_{{ auth()->user()->namaLengkap}}</h2>
+                    {{-- <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->ni}}_{{ auth()->user()->namaLengkap}}</h2> --}}
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="fw-bold fs-4 mb-0">Materi Pembelajaran</h1>
                         <!-- Form Pencarian -->
@@ -53,7 +53,8 @@
         </div>
         </main>
     </div>
-    </div>
+</div>
+    @include('layouts.footer')
     @include('layouts.script')
 </body>
 

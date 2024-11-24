@@ -9,17 +9,22 @@ class Nilai extends Model
 {
     use HasFactory;
 
-    protected $table = 'nilai';
-    protected $primaryKey = 'id_nilai';
-    protected $fillable = ['id_latihan', 'ni','nilai'];
+    protected $table = 'nilai';  
+    public $timestamps = false;  
+    protected $fillable = [
+        'id_tugas',  
+        'ni',          
+        'nilai',     
+    ];
 
-    public function latihanSoal()
-    {
-        return $this->belongsTo(Latsol::class, 'id_latihan');
+    public function latihansoal()
+    {   
+        return $this->belongsTo(Latsol::class, 'id_tugas', 'id_tugas');
     }
 
-    public function users()
+    public function siswa()
     {
-        return $this->belongsTo(User::class, 'ni'); 
+        return $this->belongsTo(User::class, 'ni', 'ni');
     }
+
 }

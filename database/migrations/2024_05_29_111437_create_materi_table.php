@@ -9,16 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('materi', function (Blueprint $table) {
-            $table->id('id_materi');
+            $table->bigIncrements('id_materi')->primary();
             $table->string('judulMateri', 255);
+            $table->string('linkVideo', 255)->nullable();
             $table->string('fileMateri', 255);
-            $table->string('kelas');
-            $table->integer('urutan');
-
         });
+        
     }
 
     /**

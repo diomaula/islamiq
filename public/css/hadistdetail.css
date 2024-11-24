@@ -1,0 +1,63 @@
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #048853;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card-body {
+    font-size: 1.1rem;
+    /* Ukuran font untuk isi */
+}
+
+.arab-text {
+    font-size: 2.0em;
+    /* Menambah ukuran font */
+    text-align: right;
+    /* Memastikan teks Arab rata kanan */
+    direction: rtl;
+    /* Menambahkan arah teks dari kanan ke kiri */
+}
+
+.card-body h5 {
+    font-weight: bold;
+}
+
+.btn-secondary {
+    background-color: #048853 !important;
+    /* Green background */
+    border-color: #048853 !important;
+    /* Green border */
+    color: white !important;
+    /* White text */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Add shadow for depth */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Smooth transition for hover effects */
+    border-radius: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #ffff !important;
+    /* Darker green on hover */
+    border-color: #ffff !important;
+    /* Darker green border on hover */
+    color: black !important;
+}
+
+.btn-secondary:hover .fas.fa-arrow-left {
+    color: black;
+    /* Icon color changes to black on hover */
+}
+
+.fas.fa-arrow-left {
+    color: white;
+    /* Change icon color to white for better contrast */
+    margin-right: 5px;
+    /* Optional: add space between the icon and text */
+}

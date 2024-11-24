@@ -1,0 +1,76 @@
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Smooth transition */
+    border: 1px solid #dee2e6;
+    /* Adding border */
+    border-radius: 20px;
+    /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    /* Original shadow for a subtle effect */
+}
+
+/* Hover effects */
+.card:hover {
+    transform: translateY(-8px);
+    /* Lift effect on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    /* Increased shadow on hover */
+}
+
+/* Title styling */
+.card-title {
+    color: #212529;
+    /* Title text color */
+    font-weight: bold;
+    /* Bold text */
+    text-align: center;
+    /* Center align */
+}
+
+.card:hover .card-title {
+    color: rgb(255, 255, 255);
+}
+
+/* Hover colors for odd/even cards */
+.card:nth-child(odd):hover {
+    background-color: #048853;
+    /* Light blue for odd cards */
+}
+
+.card:nth-child(even):hover {
+    background-color: #048853;
+}
+
+.btn-secondary {
+    background-color: #048853 !important;
+    /* Green background */
+    border-color: #048853 !important;
+    /* Green border */
+    color: white !important;
+    /* White text */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Add shadow for depth */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Smooth transition for hover effects */
+    border-radius: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #ffff !important;
+    /* Darker green on hover */
+    border-color: #ffff !important;
+    /* Darker green border on hover */
+    color: black !important;
+}
+
+.btn-secondary:hover .fas.fa-arrow-left {
+    color: black;
+    /* Icon color changes to black on hover */
+}
+
+.fas.fa-arrow-left {
+    color: white;
+    /* Change icon color to white for better contrast */
+    margin-right: 5px;
+    /* Optional: add space between the icon and text */
+}

@@ -9,23 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->unsignedBigInteger('ni')->primary();
+            $table->string('password', 255);
+            $table->enum('role', ['guru', 'siswa', 'kepsek', 'admin']);
+            $table->string('namaLengkap', 100)->nullable();
+            $table->date('tanggalLahir')->nullable();
+            $table->string('jenisKelamin', 10)->nullable();
         });
+        
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('users');
     }
