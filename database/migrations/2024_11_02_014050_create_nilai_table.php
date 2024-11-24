@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nilai', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->unsignedBigInteger('id_tugas');
             $table->unsignedBigInteger('ni')->nullable();
             $table->decimal('nilai', 5, 2)->nullable();

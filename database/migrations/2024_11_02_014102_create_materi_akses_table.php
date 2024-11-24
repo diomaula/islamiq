@@ -12,8 +12,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('materi_akses', function (Blueprint $table) {
-            $table->bigIncrements('id_materi_akses')->primary();
-            $table->bigIncrements('id_materi');
+            $table->bigIncrements('id_materi_akses');
+            $table->unsignedBigInteger('id_materi');
             $table->string('ni', 255)->nullable();
             $table->string('status', 255);
             $table->timestamp('akses_timestamp')->nullable();
